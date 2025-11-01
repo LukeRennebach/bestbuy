@@ -2,14 +2,22 @@ class Store:
     """Represents a store managing a collection of products."""
 
     def __init__(self, products):
+        """Initialize the store with a collection of Product instances."""
+        from products import Product  # local import to avoid circular dependency
+        if not all(isinstance(p, Product) for p in products):
+            raise TypeError("All items in the products list must be instances of Product.")
         self._products = products
 
     def add_product(self, product):
-        """Add a product to the store."""
+        """Add a product to the store if it does not already exist."""
+        if product in self._products:
+            raise ValueError(f"Product '{product.name}' already exists in the store.")
         self._products.append(product)
 
     def remove_product(self, product):
-        """Remove a product from the store."""
+        """Remove a product from the store if it exists."""
+        if product not in self._products:
+            raise ValueError(f"Product '{product.name}' not found in the store.")
         self._products.remove(product)
 
     def get_total_quantity(self):
